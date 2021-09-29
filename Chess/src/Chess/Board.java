@@ -1,5 +1,7 @@
 package Chess;
 
+import java.util.ArrayList;
+
 public class Board {
 	Piece[][] grid;
 	public Board() {
@@ -103,6 +105,7 @@ public class Board {
 	}
 	public boolean checkLegal(String move) {
 		Identifier piece;
+		char rowCol = move.charAt(1); //start row or column (e.g. N(a)b4)
 		char k = move.charAt(0);
 		switch(k) {
 		case 'K':
@@ -116,6 +119,7 @@ public class Board {
 			break;
 		case 'N':
 			piece = Identifier.Knight;
+			
 			break;
 		case 'B':
 			piece = Identifier.Bishop;
@@ -123,16 +127,34 @@ public class Board {
 		default:
 				piece = Identifier.Pawn;
 		}
-		char startRow;
-		char startCol;
+		int startRow;
+		int allowedCounter = 0; //#  of pieces allowed to move to desired square
+		int startCol;
+		ArrayList<Move> mtbd = new ArrayList<Move>();
 		char endRow = move.charAt(move.length() - 1);
 		char endCol = move.charAt(move.length() - 1);
 		for(int i = 0; i < 8; i++) {
 			for(int j = 0; j < 8; j++) {
 				if(grid[i][j].getIdentifier() == piece) {
-					
+					for(int l = 0; l < grid[i][j].possibleMoves().size(); l++) {
+						if(grid[i][j].possibleMoves().get(l).getCol() == endCol && grid[i][j].possibleMoves().get(l).getRow() == endRow) {
+							allowedCounter++;
+						} else {
+							mtbd.add(grid[i][j].possibleMoves().get(l));
+						}
+					}
 				}
 			}
+		}
+		if(allowedCounter > 1) {
+			for (int i = 0; i < mtbd.size(); i++) {
+				if(!(mtbd.get(i).getStartRow() == rowCol || mtbd.get(i).getStartCol() == rowCol)) {
+					mtbd.remove(i);
+				}
+			}
+		}
+		if(mtbd.size() > 0) {
+			return true;
 		}
 		return false;
 	}
