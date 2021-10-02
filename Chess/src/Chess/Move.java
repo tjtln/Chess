@@ -8,6 +8,8 @@ public class Move {
 	public Move(int startRow, int startCol, int row, int col) {
 		this.row = row;
 		this.col = col;
+		this.startCol = startCol;
+		this.startRow = startRow;
 	}
 	
 	public int getRow(){

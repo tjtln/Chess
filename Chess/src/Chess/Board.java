@@ -127,20 +127,19 @@ public class Board {
 		default:
 				piece = Identifier.Pawn;
 		}
-		int startRow;
 		int allowedCounter = 0; //#  of pieces allowed to move to desired square
-		int startCol;
 		ArrayList<Move> mtbd = new ArrayList<Move>();
-		char endRow = move.charAt(move.length() - 1);
-		char endCol = move.charAt(move.length() - 1);
+		int endRow = Character.getNumericValue(move.charAt(move.length() - 1));
+		int endCol = (move.charAt(move.length() - 2) - 97);
 		for(int i = 0; i < 8; i++) {
 			for(int j = 0; j < 8; j++) {
-				if(grid[i][j].getIdentifier() == piece) {
-					for(int l = 0; l < grid[i][j].possibleMoves().size(); l++) {
-						if(grid[i][j].possibleMoves().get(l).getCol() == endCol && grid[i][j].possibleMoves().get(l).getRow() == endRow) {
-							allowedCounter++;
-						} else {
-							mtbd.add(grid[i][j].possibleMoves().get(l));
+				if(grid[i][j] != null) {
+					if(grid[i][j].getIdentifier() == piece) {
+						for(int l = 0; l < grid[i][j].possibleMoves().size(); l++) {
+							if(grid[i][j].possibleMoves().get(l).getRow() == endRow && grid[i][j].possibleMoves().get(l).getCol() == endCol) {
+								allowedCounter++;
+								mtbd.add(grid[i][j].possibleMoves().get(l));
+							}
 						}
 					}
 				}
@@ -157,5 +156,29 @@ public class Board {
 			return true;
 		}
 		return false;
+	}
+	public void updateBoard(Move move) {
+		Identifier i = grid[move.getStartRow()][move.getStartCol()].getIdentifier();
+		switch(i) {
+		case Rook: 
+			grid[move.getRow()][move.getCol()] = new Rook(move.getRow(), move.getCol(), grid[move.getStartRow()][move.getStartCol()].getColor());
+			break;
+		case Pawn: 
+			grid[move.getRow()][move.getCol()] = new Pawn(move.getRow(), move.getCol(), grid[move.getStartRow()][move.getStartCol()].getColor());
+			break;
+		case Queen: 
+			grid[move.getRow()][move.getCol()] = new Queen(move.getRow(), move.getCol(), grid[move.getStartRow()][move.getStartCol()].getColor());
+			break;
+		case King: 
+			grid[move.getRow()][move.getCol()] = new King(move.getRow(), move.getCol(), grid[move.getStartRow()][move.getStartCol()].getColor());
+			break;
+		case Bishop: 
+			grid[move.getRow()][move.getCol()] = new Bishop(move.getRow(), move.getCol(), grid[move.getStartRow()][move.getStartCol()].getColor());
+			break;
+		case Knight: 
+			grid[move.getRow()][move.getCol()] = new Knight(move.getRow(), move.getCol(), grid[move.getStartRow()][move.getStartCol()].getColor());
+			break;
+		}
+		grid[move.getStartRow()][move.getStartCol()] = null;
 	}
 }
