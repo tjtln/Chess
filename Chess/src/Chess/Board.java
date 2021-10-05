@@ -203,8 +203,67 @@ public class Board {
 		return false;
 		
 	}
-	public boolean isInCheck(Move move) {
-		return true;
+	public boolean whiteInCheck(Move move) {
+		ArrayList<Move> moves = new ArrayList<Move>();
+		int wkRow = -1;		//index of white king's row
+		int wkCol = -1;		//index of white king's column
+		State currentPieceColor;
+		Board b = new Board();
+		b.updateBoard(move);
+		for (int i = 0; i < 8; i++) {
+			for(int j = 0; j < 8; j++) {
+				currentPieceColor = grid[i][j].getColor();
+				if(grid[i][j].getIdentifier() == Identifier.King && currentPieceColor == State.White) {
+					wkRow = i;
+					wkCol = j;
+				}
+				if(grid[i][j].getColor() == State.Black) {
+					moves.addAll(b.grid[i][j].possibleMoves());
+					for(int k = 0; k < moves.size(); k++) {
+						if(b.isBlocked(moves.get(k))) {
+							moves.remove(k);
+						}
+					}
+					for(int l = 0; l < moves.size(); l++) {
+						if(moves.get(l).getRow() == wkRow && moves.get(l).getCol() == wkCol) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+	return false;
+	}
+	public boolean blackInCheck(Move move) {
+		ArrayList<Move> moves = new ArrayList<Move>();
+		int bkRow = -1;		//index of white king's row
+		int bkCol = -1;		//index of white king's column
+		State currentPieceColor;
+		Board b = new Board();
+		b.updateBoard(move);
+		for (int i = 0; i < 8; i++) {
+			for(int j = 0; j < 8; j++) {
+				currentPieceColor = grid[i][j].getColor();
+				if(grid[i][j].getIdentifier() == Identifier.King && currentPieceColor == State.Black) {
+					bkRow = i;
+					bkCol = j;
+				}
+				if(grid[i][j].getColor() == State.White) {
+					moves.addAll(b.grid[i][j].possibleMoves());
+					for(int k = 0; k < moves.size(); k++) {
+						if(b.isBlocked(moves.get(k))) {
+							moves.remove(k);
+						}
+					}
+					for(int l = 0; l < moves.size(); l++) {
+						if(moves.get(l).getRow() == bkRow && moves.get(l).getCol() == bkCol) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+	return false;
 	}
 	public void updateBoard(Move move) {
 		Identifier i = grid[move.getStartRow()][move.getStartCol()].getIdentifier();

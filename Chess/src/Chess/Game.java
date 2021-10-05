@@ -4,11 +4,13 @@ public class Game {
 	public static void main(String[] args) {
 		Board b = new Board();
 		b.printBoard();
-//		Move move1 = new Move(1, 1, 6, 6);
-		Move move = b.returnMove("e4");
-		System.out.println(move);
-		System.out.println(b.isBlocked(move));
-//		b.updateBoard(move1);
-//		b.printBoard();
+		Move move1 = b.returnMove("e4");
+		Move move2 = b.returnMove("Bg5");
+		Move move3 = b.returnMove("Bxf7");
+		b.updateBoard(move1);
+		b.isInCheck(move1);
+		b.updateBoard(move2);
+		b.isInCheck(move2);
+		b.isInCheck(move3);
 	}
 }
