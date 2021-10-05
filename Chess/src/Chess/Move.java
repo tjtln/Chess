@@ -24,4 +24,11 @@ public class Move {
 	public int getStartCol() {
 		return startCol;
 	}
+	@Override
+	public String toString(){
+		char a = (char) (startCol + 97);
+		char b = (char)(col + 97);
+		String s = "" + a + startRow + "  -->  " + b + row;
+		return s;
+	}
 }

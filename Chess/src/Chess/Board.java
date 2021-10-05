@@ -29,7 +29,7 @@ public class Board {
 	}
 	public void printBoard(){
 		for(int i = 0; i < 8; i++) {
-			System.out.print("-----------------------------------------------\n");
+			System.out.print("--------------------------------\n");
 			System.out.flush();
 			for (int j = 0; j < 8; j++){
 				System.out.print("|");
@@ -100,10 +100,10 @@ public class Board {
 			System.out.println("");
 			System.out.flush();
 		}
-		System.out.print("----------------------------");
+		System.out.println("--------------------------------");
 		System.out.flush();
 	}
-	public boolean checkLegal(String move) {
+	public Move returnMove(String move) {
 		Identifier piece;
 		char rowCol = move.charAt(1); //start row or column (e.g. N(a)b4)
 		char k = move.charAt(0);
@@ -153,9 +153,58 @@ public class Board {
 			}
 		}
 		if(mtbd.size() > 0) {
+			return mtbd.get(0);
+		}
+		return null;
+	}
+	public boolean isOccupied(Move move) {
+		if(grid[move.getRow()][move.getCol()] == null) {
+			return false;
+		} else if(grid[move.getStartRow()][move.getStartCol()].getIdentifier() == grid[move.getRow()][move.getCol()].getIdentifier()) {
 			return true;
 		}
 		return false;
+	}
+	public boolean isBlocked(Move move) {
+		int rowDifference = move.getRow() - move.getStartRow();
+		int colDifference = move.getCol() - move.getStartCol();
+		int i = rowDifference;
+		int j = colDifference;
+		if(i > 0) {
+			i--;
+		}
+		if(i < 0) {
+			i++;
+		}
+		if(j > 0) {
+			j--;
+		}
+		if(j < 0) {
+			j++;
+		}
+		
+		while(i!=0 || j!=0) {
+			if(grid[move.getStartRow() + i][move.getStartCol() + j] != null) {
+				return true;
+			}
+			if(i > 0) {
+				i--;
+			}
+			if(i < 0) {
+				i++;
+			}
+			if(j > 0) {
+				j--;
+			}
+			if(j < 0) {
+				j++;
+			}
+		}
+		return false;
+		
+	}
+	public boolean isInCheck(Move move) {
+		return true;
 	}
 	public void updateBoard(Move move) {
 		Identifier i = grid[move.getStartRow()][move.getStartCol()].getIdentifier();
